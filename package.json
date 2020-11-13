@@ -1,15 +1,14 @@
 {
-  "name": "lywsd02-node",
+  "name": "lywsd02",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
-  "author": "",
+  "author": "Andreas Olsen Gula",
   "license": "ISC",
   "dependencies": {
-    "@abandonware/noble": "^1.9.2-10",
-    "binary": "^0.3.0"
+    "@abandonware/noble": "^1.9.2-10"
   }
 }

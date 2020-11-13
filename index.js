@@ -26,30 +26,28 @@ noble.on("stateChange", async (state) => {
 });
 
 noble.on("discover", async (peripheral) => {
-  if (peripheral.address === device || true) {
-    await peripheral.connectAsync();
-    const {
-      services,
-      characteristics,
-    } = await peripheral.discoverSomeServicesAndCharacteristicsAsync(
-      [serviceId],
-      [characteristicId]
-    );
-    const b = await characteristics[0].readAsync();
-    console.log(peripheral.advertisement.localName, peripheral.address, b);
-    if (b.length === 5) {
-      const time = new Date(1000 * b.readInt32LE(0));
-      const offset = b.readInt8(4);
-      console.log(`Got time ${time} and offset ${offset}`);
-    } else if (b.length === 4) {
-      const time = new Date(1000 * b.readInt32LE(0));
-      console.log(`Got time ${time}`);
-    }
-    const now = new Date();
-    const offset = Math.abs(now.getTimezoneOffset() / 60);
-    const buffer = toBuffer(now, offset);
-    console.log("Writing new time", now, buffer);
-    await characteristics[0].writeAsync(buffer, false);
-    await peripheral.disconnectAsync();
+  await peripheral.connectAsync();
+  const {
+    services,
+    characteristics,
+  } = await peripheral.discoverSomeServicesAndCharacteristicsAsync(
+    [serviceId],
+    [characteristicId]
+  );
+  const b = await characteristics[0].readAsync();
+  console.log(peripheral.advertisement.localName, peripheral.address, b);
+  if (b.length === 5) {
+    const time = new Date(1000 * b.readInt32LE(0));
+    const offset = b.readInt8(4);
+    console.log(`Got time ${time} and offset ${offset}`);
+  } else if (b.length === 4) {
+    const time = new Date(1000 * b.readInt32LE(0));
+    console.log(`Got time ${time}`);
   }
+  const now = new Date();
+  const offset = Math.abs(now.getTimezoneOffset() / 60);
+  const buffer = toBuffer(now, offset);
+  console.log("Writing new time", now, buffer);
+  await characteristics[0].writeAsync(buffer, false);
+  await peripheral.disconnectAsync();
 });
